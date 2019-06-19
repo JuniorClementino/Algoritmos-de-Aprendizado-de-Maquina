@@ -35,7 +35,7 @@ data_test[:] = scaler.transform(data_test)
 
 models, results, tempos = list(), list(), list()
 
-all_models = [XGBClassifier(n_estimators=256, objective='multi:softmax', num_class=7, max_depth=9,
+'''all_models = [XGBClassifier(n_estimators=256, objective='multi:softmax', num_class=7, max_depth=9,
                             colsample_bytree=.8, colsample_bylevel=.8, n_jobs=-1, random_state=2019),
 
               GradientBoostingClassifier(n_estimators=256, max_depth=9, random_state=2019),
@@ -45,7 +45,8 @@ all_models = [XGBClassifier(n_estimators=256, objective='multi:softmax', num_cla
               MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(64, 32, 16), activation='logistic',
                             random_state=5)]
 
-models.extend(all_models)
+models.extend(all_models)'''
+
 
 # Grid search for XGBClassifier:
 xgboost = XGBClassifier(num_class=7)
@@ -55,6 +56,7 @@ parameters = [
 clf = GridSearchCV(xgboost, parameters, cv=5, verbose=2, n_jobs=-1)
 clf.fit(data_train, data_labels)
 print('XGBClassifier - Best estimator: ', clf.best_estimator_)
+models.append(clf.best_estimator_)
 
 # TODO: grid search for all other models
 
@@ -62,7 +64,7 @@ print('XGBClassifier - Best estimator: ', clf.best_estimator_)
 kf = KFold(n_splits=5, shuffle=True, random_state=2019)
 # Running models for the dataset:
 # For each model:
-for model in all_models:
+for model in models:
     print('===========\n Model: ', model)
     # for each fold:
     accuracies = list()
@@ -93,7 +95,7 @@ dataframe = dataframe.sort_values(by=['Accuracy'], ascending=False)
 dataframe.to_csv('models_results.csv', index=False)
 
 model_index = 0
-for model in all_models:
+for model in models:
     preds = model.predict(data_test) + 1
     dataframe = pd.DataFrame(data={'Id': test_ids, 'Cover_Type': preds})
     dataframe.to_csv('submission_model_' + str(model_index) + '.csv', index=False)
