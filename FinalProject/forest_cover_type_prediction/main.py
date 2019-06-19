@@ -47,21 +47,20 @@ all_models = [XGBClassifier(n_estimators=256, objective='multi:softmax', num_cla
 
 models.extend(all_models)
 
-# Grid search:
+# Grid search for XGBClassifier:
 xgboost = XGBClassifier(num_class=7)
 parameters = [
     {'n_estimators': [100, 200, 300], 'max_depth': [5, 9, 14], 'colsample_bytree': [.5, .7, .9],
      'colsample_bylevel': [.5, .7, .9], 'learning_rate': [0.1, 0.05, 0.01]}]
-
 clf = GridSearchCV(xgboost, parameters, cv=5, verbose=2, n_jobs=-1)
 clf.fit(data_train, data_labels)
+print('XGBClassifier - Best estimator: ', clf.best_estimator_)
 
-print('Best estimator:', clf.best_estimator_)
+# TODO: grid search for all other models
+
 
 kf = KFold(n_splits=5, shuffle=True, random_state=2019)
-
-"""Running models for the dataset:"""
-
+# Running models for the dataset:
 # For each model:
 for model in all_models:
     print('===========\n Model: ', model)
