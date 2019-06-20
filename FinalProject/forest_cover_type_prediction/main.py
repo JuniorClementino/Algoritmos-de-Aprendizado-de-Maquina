@@ -51,14 +51,38 @@ models.extend(all_models)'''
 # Grid search for XGBClassifier:
 xgboost = XGBClassifier(num_class=7)
 parameters = [
-    {'n_estimators': [100, 200, 300], 'max_depth': [5, 9, 14], 'colsample_bytree': [.5, .7, .9],
-     'colsample_bylevel': [.5, .7, .9], 'learning_rate': [0.1, 0.05, 0.01]}]
-clf = GridSearchCV(xgboost, parameters, cv=5, verbose=2, n_jobs=-1)
+    {'n_estimators': [128, 256, 400], 'max_depth': [4, 8, 16], 'max_features': ['log2', 'sqrt'],
+     'colsample_bytree': [.2, .5, .9],
+     'colsample_bylevel': [.2, .5, .9], 'colsample_bynode':[.2, .5, .9],
+     'learning_rate': [0.1, 0.2, 0.04]}]
+
+clf = GridSearchCV(xgboost, parameters, cv=5, verbose=1, n_jobs=-1)
 clf.fit(data_train, data_labels)
 print('XGBClassifier - Best estimator: ', clf.best_estimator_)
 models.append(clf.best_estimator_)
 
-# TODO: grid search for all other models
+
+# Grid search for RandomForestClassifier:
+rfc = RandomForestClassifier()
+parameters = [
+    {'n_estimators': [100, 200, 400], 'max_depth': [5, 9, 13], 'max_features': ['log2', 'sqrt'],
+     'min_samples_leaf':[1, 2, 4], 'criterion': ['gini', 'entropy'], 'min_samples_split':[2, 4, 8]}]
+clf = GridSearchCV(rfc, parameters, cv=5, verbose=1, n_jobs=-1)
+clf.fit(data_train, data_labels)
+print('RandomForestClassifier - Best estimator: ', clf.best_estimator_)
+models.append(clf.best_estimator_)
+
+
+# Grid search for GradientBoostingClassifier:
+gbc = GradientBoostingClassifier()
+parameters = [
+    {'n_estimators': [100, 200, 400], 'max_depth': [5, 9, 13], 'max_features': ['log2', 'sqrt'],
+     'min_samples_leaf': [1, 2, 4, 8], 'loss':['deviance', 'exponential'],
+     'learning_rate': [0.1, 0.05, 0.2], 'min_samples_split':[2, 4, 8]}]
+clf = GridSearchCV(gbc, parameters, cv=5, verbose=1, n_jobs=-1)
+clf.fit(data_train, data_labels)
+print('GradientBoostingClassifier - Best estimator: ', clf.best_estimator_)
+models.append(clf.best_estimator_)
 
 
 kf = KFold(n_splits=5, shuffle=True, random_state=2019)
@@ -101,3 +125,13 @@ for model in models:
     dataframe.to_csv('submission_model_' + str(model_index) + '.csv', index=False)
     model_index += 1
     print(dataframe.head())
+
+
+'''
+Grid Search for XGBoost:
+Best Model: XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=0.7,
+       colsample_bytree=0.9, gamma=0, learning_rate=0.1, max_delta_step=0,
+       max_depth=14, min_child_weight=1, missing=None, n_estimators=200,
+       n_jobs=1, nthread=None, num_class=7, objective='multi:softprob',
+       random_state=0, reg_alpha=0, reg_lambda=1, scale_pos_weight=1,
+       seed=None, silent=True, subsample=1)'''
