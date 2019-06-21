@@ -1,0 +1,27 @@
+
+XGBClassifier - Best estimator:  XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=0.9,
+       colsample_bynode=0.9, colsample_bytree=0.9, gamma=0,
+       learning_rate=0.04, max_delta_step=0, max_depth=16,
+       max_features='log2', min_child_weight=1, missing=None,
+       n_estimators=400, n_jobs=1, nthread=None, num_class=7,
+       objective='multi:softprob', random_state=0, reg_alpha=0,
+       reg_lambda=1, scale_pos_weight=1, seed=None, silent=True,
+       subsample=1)
+
+RandomForestClassifier - Best estimator:  RandomForestClassifier(bootstrap=True, class_weight=None, criterion='entropy',
+            max_depth=13, max_features='sqrt', max_leaf_nodes=None,
+            min_impurity_decrease=0.0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=2,
+            min_weight_fraction_leaf=0.0, n_estimators=400, n_jobs=None,
+            oob_score=False, random_state=None, verbose=0,
+            warm_start=False)
+
+GradientBoostingClassifier - Best estimator:  GradientBoostingClassifier(criterion='friedman_mse', init=None,
+              learning_rate=0.1, loss='deviance', max_depth=13,
+              max_features='sqrt', max_leaf_nodes=None,
+              min_impurity_decrease=0.0, min_impurity_split=None,
+              min_samples_leaf=8, min_samples_split=2,
+              min_weight_fraction_leaf=0.0, n_estimators=400,
+              n_iter_no_change=None, presort='auto', random_state=None,
+              subsample=1.0, tol=0.0001, validation_fraction=0.1,
+              verbose=0, warm_start=False)
